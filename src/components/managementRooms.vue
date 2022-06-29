@@ -4,11 +4,19 @@
       <template #header>
         <div class="card-header">
           <el-row align="middle">
-            <el-col :span="4" style="display: flex">
+            <el-col :span="8" style="display: flex">
               <el-input v-model="query.roomNumber" placeholder="房号"></el-input>
               <el-select style="margin-left: 10px" v-model="query.type" class="m-2" placeholder="房间类型">
                 <el-option
                     v-for="item in roomsType"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                />
+              </el-select>
+              <el-select style="margin-left: 10px" v-model="query.roomstatus" class="m-2" placeholder="状态">
+                <el-option
+                    v-for="item in roomsStatus"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
@@ -21,7 +29,7 @@
               <el-button @click="findAll()" style="margin-left: 10px" type="primary">查询全部</el-button>
 
             </el-col>
-            <el-col :span="3" :offset="14">
+            <el-col :span="3" :offset="10">
               <el-button @click="dialogVisible_addRoom=true" round type="primary">添加房间</el-button>
             </el-col>
           </el-row>
@@ -30,7 +38,9 @@
       <el-table :data="tableData_rooms" style="width: 100%">
         <el-table-column prop="roomtype" label="类型" width="180"/>
         <el-table-column prop="roomnumber" label="房号" width="180"/>
-        <el-table-column prop="roomstatus" label="状态" width="180"/>
+        <el-table-column prop="roomstatus" label="状态" width="80"/>
+        <el-table-column prop="roomdeposit" label="押金" width="100"></el-table-column>
+        <el-table-column prop="roomprice" label="价格" width="100"></el-table-column>
         <el-table-column prop="roomdescribe" label="备注信息"/>
 
         <el-table-column fixed="right" label="操作" width="120">
@@ -43,12 +53,19 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination style="margin-top: 40px;" background
-                     layout="prev, pager, next"
-                     :total="query.total"
-                     v-model:currentPage="query.currentPage"
-                     :page-size="query.pageSize"
-      />
+      <div style="display: flex">
+        <el-pagination style="margin-top: 40px;" background
+                       layout="prev, pager, next"
+                       :total="query.total"
+                       v-model:currentPage="query.currentPage"
+                       :page-size="query.pageSize"
+        />
+        <h1 style="text-align: center;float: right;    margin-top: 44px;
+    margin-left: 25px;
+    font-size: 20px;">共 {{ query.total }} 间房</h1>
+      </div>
+
+
     </el-card>
 
     <el-dialog
@@ -99,6 +116,7 @@
 <script>
 
 import roomAPI from "@/api/room";
+import cookie from "@/utils/cookie";
 
 export default {
   name: "managementRooms",
@@ -127,9 +145,24 @@ export default {
           label: '四人间',
         },
       ],
+      roomsStatus: [
+        {
+          value: '入住',
+          label: '入住',
+        }, {
+          value: '空闲',
+          label: '空闲',
+        }, {
+          value: '预定',
+          label: '预定',
+
+        }
+      ],
       query: {
         type: "",
         roomNumber: "",
+        roomstatus: "",
+        hotelid: cookie.getTokenByName("hotelID"),
         pageSize: 10,
         total: 1000,
         currentPage: 1,
@@ -140,7 +173,8 @@ export default {
         roomnumber: "",
         roomprice: null,
         roomdeposit: null,
-        roomdescribe: ""
+        roomdescribe: "",
+        hotelid: cookie.getTokenByName("hotelID")
       }
     }
   },
@@ -164,6 +198,7 @@ export default {
     findAll() {
       this.query.roomNumber = ""
       this.query.type = ""
+      this.query.roomstatus = ""
       this.query.currentPage = 1
       this.findPage()
     }

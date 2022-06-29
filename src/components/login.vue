@@ -20,7 +20,7 @@
               <vab-icon :icon="['fas', 'user']"/>
             </span>
             <el-input
-                v-model="form.username"
+                v-model="form.email"
                 placeholder="请输入用户名"
                 tabindex="1"
                 type="text"
@@ -57,9 +57,7 @@
           >
             登录
           </el-button>
-          <router-link to="/register">
-            <div style="margin-top: 20px">注册</div>
-          </router-link>
+
         </el-form>
       </el-col>
     </el-row>
@@ -68,6 +66,8 @@
 
 <script>
 
+import adminAPI from "@/api/admin";
+import cookie from "@/utils/cookie";
 
 export default {
   name: 'Login',
@@ -76,7 +76,7 @@ export default {
       nodeEnv: process.env.NODE_ENV,
       title: "上电力国际连锁酒店管理平台",
       form: {
-        username: '',
+        email: '',
         password: '',
       },
       loading: false,
@@ -85,12 +85,22 @@ export default {
     }
   },
   mounted() {
-    this.form.username = 'admin'
-    this.form.password = '123456'
+    this.form.email = '369770384@qq.com'
+    this.form.password = '123'
   },
   methods: {
     Login() {
-      this.$router.push('/index')
+      adminAPI.login(this.form).then(res => {
+        if (res.code === 200) {
+          this.$message.success('登录成功！')
+          cookie.setTokenByName("adminUserName", res.data.userName);
+          cookie.setTokenByName("adminUserURl", res.data.userUrl);
+          cookie.setTokenByName("hotelID", res.data.hotelId);
+          this.$router.push('/index')
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
     }
   },
 }

@@ -1,14 +1,14 @@
 <template>
   <div class="header ">
     <el-row>
-      <el-col :span="5">
+      <el-col :span="8">
         <div class="centerAndFlex">
           <el-avatar :size="50"
                      src="https://thecomputer-1308737201.cos.ap-shanghai.myqcloud.com/UserAvatar/10759616-a3aa-4032-bd4f-5cebe1c8c2f3.png"/>
-          <span class="title" @click="$router.push('/')"> 上电力国际连锁酒店</span>
+          <span class="title" @click="$router.push('/index')"> {{ user.hotelName }}</span>
         </div>
       </el-col>
-      <el-col :offset="16" :span="3">
+      <el-col :offset="13" :span="3">
 
         <div class="centerAndFlex ">
           <el-avatar :size="50"
@@ -20,7 +20,7 @@
               trigger="click"
           >
             <template #reference>
-              <span class="user">{{ user.name }}</span>
+              <span class="user" style="color: #f6f6f6">{{ user.name }}</span>
             </template>
             <div style="display: flex; flex-direction: column;
               align-items: center;">
@@ -37,6 +37,7 @@
 
 <script>
 import cookie from "@/utils/cookie";
+import hotelAPI from "@/api/hotel";
 
 export default {
   name: "header",
@@ -45,33 +46,37 @@ export default {
       isLogin: false,
       user: {
         name: "",
-        url: ""
+        url: "",
+        hotelID: 0,
+        hotelName: "",
       }
     }
   },
   created() {
-    if (cookie.getTokenByName("user")) {
+    if (cookie.getTokenByName("adminUserName")) {
       this.isLogin = true
-      this.user.name = cookie.getTokenByName("userName")
-      this.user.url = cookie.getTokenByName("userUrl")
-
+      this.user.name = cookie.getTokenByName("adminUserName")
+      this.user.url = cookie.getTokenByName("adminUserURl")
+      this.user.hotelID = cookie.getTokenByName("hotelID")
+      this.findHotel()
     }
   },
   methods: {
-    toLogin() {
-      this.$router.push('login')
-    },
     loginOut() {
       this.isLogin = false
-      cookie.removeTokenByName("user")
+      cookie.removeTokenByName("adminUserName")
+      cookie.removeTokenByName("adminUserURl")
+      cookie.removeTokenByName("hotelID")
+      this.$router.push('/')
     },
-    toRegister() {
-      this.$router.push('/register')
+    findHotel() {
+      hotelAPI.findHotel(this.user.hotelID).then(res => {
+        console.log(res)
+        this.user.hotelName = res.data.hotelname
+      })
     },
-    toInformation() {
-      this.$router.push('/userInfo')
-    }
   }
+
 }
 </script>
 

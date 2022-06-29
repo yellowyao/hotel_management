@@ -24,7 +24,6 @@ const request = axios.create({
     return Promise.reject(error)
 })*/
 
-
 //响应拦截器
 request.interceptors.response.use((response) => {
     //只返回config内的data的数据，其他的不展示

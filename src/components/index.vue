@@ -16,16 +16,19 @@
                 @open="handleOpen"
                 @close="handleClose"
                 router
+                style="height: 100%;"
             >
               <el-sub-menu index="1">
                 <template #title>
                   <el-icon>
                     <location/>
                   </el-icon>
-                  <span>办理业务</span>
+                  <span>业务</span>
                 </template>
-                <el-menu-item index="/index/checkIn">办理入住</el-menu-item>
-                <el-menu-item index="./1-2">办理离店</el-menu-item>
+                <el-menu-item index="/index/checkIn">办理入住(已预约)</el-menu-item>
+                <el-menu-item index="/index/checkInNoOrder">办理入住(未预约)</el-menu-item>
+                <el-menu-item index="/index/checkOut">入住情况</el-menu-item>
+                <el-menu-item index="/index/expire">历史居住情况</el-menu-item>
 
               </el-sub-menu>
               <el-sub-menu index="2">
@@ -35,12 +38,12 @@
                   </el-icon>
                   <span>管理酒店</span>
                 </template>
-                <el-menu-item index="2-1">查看客房</el-menu-item>
+                <el-menu-item index="/index/rooms">查看客房</el-menu-item>
                 <el-menu-item index="/index/managementRooms">管理客房</el-menu-item>
               </el-sub-menu>
             </el-menu>
           </el-aside>
-          <el-main>
+          <el-main style="height: 91vh">
             <router-view></router-view>
           </el-main>
         </el-container>

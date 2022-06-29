@@ -21,6 +21,11 @@ import login from "@/components/login";
 import index_ from "@/components/index"
 import checkIn from "@/components/checkIn"
 import managementRooms from "@/components/managementRooms";
+import checkInNoOrder from "@/components/checkInNoOrder";
+import checkOut from "@/components/checkOut";
+import rooms from "@/components/rooms";
+import ECharLayout from "@/components/ECharLayout";
+import expire from "@/components/histroy";
 import {
     ElMessage
 } from 'element-plus'
@@ -45,8 +50,24 @@ const router = createRouter({
                     path: '/index/checkIn',
                     component: checkIn
                 }, {
+                    path: '/index/checkInNoOrder',
+                    component: checkInNoOrder
+                }, {
+                    path: '/index/checkOut',
+                    component: checkOut
+
+                }, {
                     path: 'managementRooms',
                     component: managementRooms
+                }, {
+                    path: '/index/rooms',
+                    component: rooms
+                }, {
+                    path: '/index',
+                    component: ECharLayout
+                }, {
+                    path: '/index/expire',
+                    component: expire
                 }
             ]
         }

@@ -16,7 +16,25 @@ function findRoomsPage(query) {
     })
 }
 
+function findAllRoomsByStatusAndType(query) {
+    return request({
+        url: 'rooms/findAllRoomsByStatusAndType',
+        method: 'post',
+        data: query
+    })
+}
+
+function getRoomcheckinstatus(params) {
+    return request({
+        url: 'roomcheckinstatus/getRoomcheckinstatus',
+        method: 'post',
+        data: params
+    })
+}
+
 export default {
     addRooms,
-    findRoomsPage
+    findRoomsPage,
+    findAllRoomsByStatusAndType,
+    getRoomcheckinstatus
 }
